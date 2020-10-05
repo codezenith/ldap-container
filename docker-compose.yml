@@ -6,13 +6,15 @@ services:
       - "389:389"
       - "636:636"
     environment:
-      - LDAP_ORGANISATION="My Company"
-      - LDAP_DOMAIN="my-company.com"
-      - LDAP_ADMIN_PASSWORD="JonSn0w"
+      - LDAP_ORGANISATION=CodeZenith Consulting e.U.
+      - LDAP_DOMAIN=codezenith.com
+      - LDAP_ADMIN_PASSWORD=JohnSn0w
+      #- DOCKER_ON_RUN=ldapadd -x -H ldap://localhost -b dc=codezenith,dc=com -D "cn=config" -W -f /tmp/extensions/nis.ldif"
     volumes:
-      - /tmp/ldap_db/:/var/lib/ldap/
-      - /tmp/ldap_conf/:/etc/ldap/slapd.d/
-    hostname: "my-company.com" # used for TLS generation
+      - /tmp/ldap/:/var/lib/ldap/
+      - /tmp/sldap/:/etc/ldap/slapd.d/
+      - ./extensions/:/tmp/extensions/
+    hostname: "codezenith.com" # used for TLS generation
     networks:
       main:
         ipv4_address: 172.16.238.10
@@ -25,7 +27,8 @@ services:
     environment:
       - PHPLDAPADMIN_LDAP_HOSTS=172.16.238.10
     networks:
-      - main
+      main:
+        ipv4_address: 172.16.238.5
 
 networks:
     main:
